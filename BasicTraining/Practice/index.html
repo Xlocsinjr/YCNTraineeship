@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script>
+      function addFunction() {
+        let addVar = document.getElementById('box').value;
+        document.getElementById('AddDiv').innerHTML = addVar;
+      }
+    </script>
+  </head>
+  <body>
+    <div id="titlebox"><h1>Bank of Xander</h1></div>
+    <div id="balanceDiv">Balance</div>
+    <div>
+      <input type="text" id="box" />
+      <button type="button" id="depositButton" onclick="deposit()">
+        Deposit
+      </button>
+      <button type="button" id="withdrawButton">Withdraw</button>
+    </div>
+    <ul id="transactions">
+      <li>test</li>
+      <li>test2</li>
+    </ul>
+  </body>
+  <script src="./indexScripts.js"></script>
+</html>
