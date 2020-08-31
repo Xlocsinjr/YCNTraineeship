@@ -9,9 +9,9 @@ import java.util.Scanner;
 public class Blackjack {
   public static void main(String[] args) {
     // defines arrays for card array initialisation
-    String suit[] = {"Hearts", "Diamonds", "Spades", "Clubs"};
-    String value[] = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
-    Card cardArray[] = new Card[suit.length * value.length];
+    String[] suit = {"Hearts", "Diamonds", "Spades", "Clubs"};
+    String[] value = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
+    Card[] cardArray = new Card[suit.length * value.length];
 
     // generate the array of cards
     int indexCounter = 0;
@@ -25,9 +25,9 @@ public class Blackjack {
     }
 
     // Duplicate the initial (unshuffled array), then shuffles the original 
-    Card cardArrayInit[] = cardArray;
+    Card[] cardArrayInit = cardArray;
     cardArray = Card.shuffleDeck(cardArrayInit);
-    Card handArray[] = {};
+    Card[] handArray = {};
 
     boolean gameOver = false;
     int points = 0;
@@ -53,22 +53,21 @@ public class Blackjack {
           hitCard.declareCard();
 
           // Updates the hand array: 
-          // creates a new array that's one element longer and adds the new card at the end.
-          int handArrayLength = handArray.length;
-          int newHandLength = handArray.length + 1;
-          Card newHandArray[] = new Card[newHandLength];
-          newHandArray[handArrayLength] = hitCard;
-          handArray = newHandArray;
+          handArray = Card.updateHandArray(handArray, hitCard);
 
-          // Updates the card array
+          // Updates the card array:
+          // create list from card array, remove first element, update card array with new array made from list
           List<Card> newCardList = new ArrayList<Card>(Arrays.asList(cardArray));
           newCardList.remove(0);	
           Card[] newCardArray = new Card[newCardList.size()];
           newCardArray = newCardList.toArray(newCardArray);
           cardArray = newCardArray;
 
-          System.out.println(handArray.length);
-          System.out.println(cardArray.length);
+          // determine hand points
+          int prePoints = points;
+          points = Card.showHand(handArray);
+          System.out.println(prePoints + " + " + hitCard.value + " = " + points);
+          System.out.println("===============================");
 
           
         } 
@@ -76,10 +75,11 @@ public class Blackjack {
 
         }
         // if restarted:
-        // remake the card array to a shuffled list from the initial card array
-        // set points back to 0
+        // remake the card array to a shuffled list from the initial card array,
+        // empties hand, set points back to 0
         else if (userInput.equals("r")){
           cardArray = Card.shuffleDeck(cardArrayInit);
+          handArray = new Card[]{};
           points = 0;
           System.out.println("restarting ...");
           System.out.println("===============================");
@@ -135,12 +135,41 @@ class Card {
     return cardArrayNew;
   }
 
-  static int determinePoints(List<Card> handListArg){
+  static Card[] updateHandArray(Card[] handArrayArg, Card hitCardArg){
+    // declare new array with one more element than current hand
+    int newHandLength = handArrayArg.length + 1;
+    Card[] newHandArray = new Card[newHandLength];
+
+    // copy previous hand
+    for (int i = 0; i < handArrayArg.length; i++){
+      newHandArray[i] = handArrayArg[i];
+    }
+
+    // add the latest card received
+    newHandArray[handArrayArg.length] = hitCardArg;
+    return newHandArray;
+  }
+
+  static int showHand(Card[] handArrayArg){
+    // determines the points value of the hand
+    // returns the points value of the hand
     int handPoints = 0;
 
-    for (int i = 0; i < handListArg.size(); i++){
-      int CardValue = Integer.parseInt(handListArg.get(i).value);
-      
+    for (int k = 0; k < handArrayArg.length; k++){
+      String cVal = handArrayArg[k].value;
+
+      if (cVal.equals("Jack") || cVal.equals("Queen") || cVal.equals("King")){
+        handPoints += 10;
+      }
+      else if(cVal.equals("Ace")){
+        handPoints += 11;
+        if (handPoints > 21){
+          handPoints -= 10;
+        }
+      }
+      else {
+        handPoints += Integer.parseInt(cVal);
+      }      
     }
 
     return handPoints;
