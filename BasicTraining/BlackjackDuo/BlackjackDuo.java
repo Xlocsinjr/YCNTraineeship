@@ -1,13 +1,11 @@
 /* ==================================================================
-* Blackjack.java
+* BlackjackDuo.java
 *
-* Implements a simple single player blackjack game.
-* The user is asked for input to keep the game going.
+* 
+* 
 *
 * Xander Locsin
 ** ==================================================================*/ 
-
-
 import java.util.Random;
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,7 +15,7 @@ import java.util.Scanner;
 
 
 
-public class Blackjack {
+public class BlackjackDuo {
   public static void main(String[] args) {
     // defines arrays for card array initialisation
     String[] suit = {"Hearts", "Diamonds", "Spades", "Clubs"};
@@ -39,95 +37,167 @@ public class Blackjack {
     Card[] cardArrayInit = cardArray;
     cardArray = Card.shuffleDeck(cardArrayInit);
     Card[] handArray = {};
+    Card[] handArrayDealer = {};
 
     boolean gameOver = false;
     int points = 0;
+    int dealerPoints = 0;
+    boolean playerStand = false;
+    boolean dealerStand = false;
+
+
 
     while (!gameOver) {
       System.out.println("Enter a command");
-      System.out.println("k: hit    p: pass    r: restart    q: quit");
+      System.out.println("k: hit    p: pass    s: stand    r: restart    q: quit");
      
       boolean isValid = false;
       String userInput = "initInput";
 
-      // ask for user input until a valid command has been entered
-      while (!isValid) {
-        isValid = true;
-        Scanner scanner = new Scanner(System.in);
-        userInput = scanner.nextLine();  // Read user input
+      Card hitCard = cardArray[0];
 
-        Card hitCard = cardArray[0];
+      String endTurnStatement = "";
 
-        // if hit:
-        if (userInput.equals("k")){
-          System.out.println("New card: " + hitCard.declareCard());
-          
-          // Updates the hand array to include the new card
-          handArray = Card.updateHandArray(handArray, hitCard);
-          Card.showHand(handArray);
+      // ========= Player's turn =================
+      String playerPointStatement = "";
 
-          // Updates the card array to remove the new card
-          cardArray = Card.updateCardArray(cardArray);
+      // ask for user input until a valid command has been entered if not standing
+      if (!playerStand){
+        while (!isValid) {
+          isValid = true;
+          Scanner scanner = new Scanner(System.in);
+          userInput = scanner.nextLine();  // Read user input
 
-          // determine card points
-          int hitCardPoints = hitCard.calcCardPoints();
-          points += hitCardPoints;
+          String playerCardVal = hitCard.value;
 
-          // if points exceed 21 and the card was an Ace, turn card value to 1
-          if (points > 21 && hitCard.value.equals("Ace")){
-            hitCardPoints = 1;
-            points -= 10;
+          // if hit:
+          if (userInput.equals("k")){          
+            // Updates the hand array to include the new card
+            // Updates the card array to remove the new card
+            handArray = Card.updateHandArray(handArray, hitCard);
+            cardArray = Card.updateCardArray(cardArray);
+            hitCard = cardArray[0]; // so the dealer hits a new card
+
+            // calculate hand value and prints cards in hand
+            points = Card.showHand(handArray, "player's hand: ", false);
+
+            // blackjack if points = 21, quits game
+            if (points == 21){
+              endTurnStatement = "***Blackjack, you win! To play again, run the code again. ***";
+              gameOver = true;
+            }
+
+            // busts if points over 21, quits game
+            if (points > 21){
+              endTurnStatement = "***You bust! Game over. To play again, run the code again.***";
+              gameOver = true;
+            }
+
+            playerPointStatement = "+ " + playerCardVal + "      points: " + points;
+          } 
+
+          // if passed:
+          else if (userInput.equals("p")){
+            playerPointStatement = "passed      points: " + points;
           }
 
+          // if standing:
+          else if (userInput.equals("s")){
+            playerStand = true;
+            playerPointStatement = "standing      points: " + points;
+          }
+
+          // if restarted:
+          else if (userInput.equals("r")){
+            // remake the card array to a shuffled list from the initial card array,
+            // empties hand, set points back to 0
+            cardArray = Card.shuffleDeck(cardArrayInit);
+            handArray = new Card[]{};
+            handArrayDealer = new Card[]{};
+            points = 0;
+            dealerPoints = 0;
+            endTurnStatement = "***** restarting ...*****";
+          } 
+
+          // if quit:
+          // end game and code
+          else if (userInput.equals("q")){
+            endTurnStatement = "***** quitting ... To play again, run the code again. *****";
+            gameOver = true;
+          }
+
+          else {
+            isValid = false;
+            System.out.println("Please enter a valid command.");
+            System.out.println("k: hit    p: pass    s: stand    r: restart    q: quit");
+          }
+        }
+      }
+      else{
+        playerPointStatement = "standing      points: " + points;
+      }
+
+      Card.showHand(handArray, "player's hand: ", true);
+      System.out.println(playerPointStatement);
+      System.out.println("");
+
+      // ========= Dealer's turn =================
+      String dealerPointStatement = "";
+      String dealerCardVal = hitCard.value;
+
+      if (!dealerStand && !gameOver && !userInput.equals("r") && !userInput.equals("q")){
+        if (dealerPoints >= 17){
+          dealerStand = true;
+          dealerPointStatement = "standing      points: " + dealerPoints;;
+        }
+        else{
+          // Update dealer hand array and card array
+          handArrayDealer = Card.updateHandArray(handArrayDealer, hitCard);
+          cardArray = Card.updateCardArray(cardArray);
+
+          // calculate hand value and prints cards in hand
+          dealerPoints = Card.showHand(handArrayDealer, "dealer's hand: ", false);
+
           // blackjack if points = 21, quits game
-          if (points == 21){
-            System.out.println("***Blackjack!***");
-            System.out.println("To play again, run the code again.");
+          if (dealerPoints == 21){
+            endTurnStatement = "***Blackjack! The dealer wins***";
+            endTurnStatement += " To play again, run the code again.";
             gameOver = true;
           }
 
           // busts if points over 21, quits game
-          if (points > 21){
-            System.out.println("***Bust! Game over***");
-            System.out.println("To play again, run the code again.");
+          if (dealerPoints > 21){
+            endTurnStatement = "***The dealer busts! You win!***";
+            endTurnStatement += " To play again, run the code again.";
             gameOver = true;
           }
 
-          System.out.println("+ " + hitCardPoints + "      points: " + points);
-          System.out.println("===============================");
-        } 
-
-        // if passed:
-        else if (userInput.equals("p")){
-          // Updates the card array to remove the new card
-          cardArray = Card.updateCardArray(cardArray);
-          Card.showHand(handArray);
-          System.out.println("passed      points: " + points);
-          System.out.println("===============================");
-        }
-        // if restarted:
-        // remake the card array to a shuffled list from the initial card array,
-        // empties hand, set points back to 0
-        else if (userInput.equals("r")){
-          cardArray = Card.shuffleDeck(cardArrayInit);
-          handArray = new Card[]{};
-          points = 0;
-          System.out.println("***restarting ...***");
-          System.out.println("===============================");
-        } 
-        // if quit:
-        // end game and code
-        else if (userInput.equals("q")){
-          System.out.println("quitting ... To play again, run the code again.");
-          System.out.println("===============================");
-          gameOver = true;
-        }
-        else {
-          isValid = false;
-          System.out.println("Please enter a valid command.");
-          System.out.println("k: hit    p: pass    r: restart    q: quit");
+          dealerPointStatement = "+ " + dealerCardVal + "      points: " + dealerPoints;
         }
       }
+      else{
+        dealerPointStatement = "standing      points: " + dealerPoints;;
+      }
+      
+      Card.showHand(handArrayDealer, "dealer's hand: ", true);
+      System.out.println(dealerPointStatement);
+
+      // ========= end of turn ============
+      if (dealerStand && playerStand){
+        if (points > dealerPoints){
+          endTurnStatement = "***** You win! To play again, run the code again. *****";
+        }
+        else if (points == dealerPoints){
+          endTurnStatement = "***** Tie! To play again, run the code again. *****";
+        }
+        gameOver = true;
+      }
+
+      if (!endTurnStatement.isEmpty()){
+        System.out.println("");
+        System.out.println(endTurnStatement);
+      }
+      System.out.println("===============================");
     }
 
   
@@ -212,18 +282,38 @@ class Card {
     return newCardArray;
   }
 
-  static void showHand(Card[] handArrayArg){
-    // determines the points value of the hand
+  static int showHand(Card[] handArrayArg, String handIdentity, boolean printBool){
+    // determines the points value of the hand and prints a string of the cards
     // returns the points value of the hand
     int handPoints = 0;
     String handString = "";
 
+    int aceCount = 0;
+
     for (int k = 0; k < handArrayArg.length; k++){
+      String cardString = handArrayArg[k].declareCard();
       handString += "|";
-      handString += handArrayArg[k].declareCard();
+      handString += cardString;
       handString += "|";
+
+      int cardValue = handArrayArg[k].calcCardPoints();
+      handPoints += cardValue;
+
+      if (handArrayArg[k].value.equals("Ace")){
+        aceCount++;
+      }
     }
-    System.out.println("Current hand: " + handString);
+    // subtract 10 for every ace in hand, as long as handpoints is over 21
+    while (handPoints > 21 && aceCount > 0){
+      aceCount--;
+      handPoints -= 10;
+    }
+
+    if (printBool){
+      System.out.println(handIdentity + handString);
+    }
+    
+    return handPoints;
   }
 }
 
