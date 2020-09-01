@@ -37,26 +37,23 @@ public class BlackjackDuo {
     // Duplicate the initial (unshuffled array), then shuffles the original 
     Card[] cardArrayInit = cardArray;
     cardArray = Card.shuffleDeck(cardArrayInit);
+    
     Card[] handArray = {};
     Card[] handArrayDealer = {};
-
     boolean gameOver = false;
     int points = 0;
     int dealerPoints = 0;
     boolean playerStand = false;
     boolean dealerStand = false;
 
-
-
     while (!gameOver) {
       System.out.println("Enter a command");
       System.out.println("k: hit    p: pass    s: stand    r: restart    q: quit");
      
       boolean isValid = false;
-      String userInput = "initInput";
+      String userInput = "";
 
       Card hitCard = cardArray[0];
-
       String endTurnStatement = "";
 
       // ========= Player's turn =================
@@ -138,6 +135,7 @@ public class BlackjackDuo {
         playerPointStatement = "standing      points: " + points;
       }
 
+      // print results of player's action
       Card.showHand(handArray, "player's hand: ", true);
       System.out.println(playerPointStatement);
       System.out.println("");
@@ -147,6 +145,7 @@ public class BlackjackDuo {
       String dealerCardVal = hitCard.value;
 
       if (!dealerStand && !gameOver && !userInput.equals("r") && !userInput.equals("q")){
+        // dealer will keep hitting until dealerPoints >= 17
         if (dealerPoints >= 17){
           dealerStand = true;
           dealerPointStatement = "standing      points: " + dealerPoints;;
@@ -161,15 +160,15 @@ public class BlackjackDuo {
 
           // blackjack if points = 21, quits game
           if (dealerPoints == 21){
-            endTurnStatement = "***Blackjack! The dealer wins***";
-            endTurnStatement += " To play again, run the code again.";
+            endTurnStatement = "***** Blackjack! The dealer wins";
+            endTurnStatement += " To play again, run the code again. *****";
             gameOver = true;
           }
 
           // busts if points over 21, quits game
           if (dealerPoints > 21){
-            endTurnStatement = "***The dealer busts! You win!***";
-            endTurnStatement += " To play again, run the code again.";
+            endTurnStatement = "***** The dealer busts! You win!";
+            endTurnStatement += " To play again, run the code again. *****";
             gameOver = true;
           }
 
@@ -180,10 +179,12 @@ public class BlackjackDuo {
         dealerPointStatement = "standing      points: " + dealerPoints;;
       }
       
+      // print result of dealer's action
       Card.showHand(handArrayDealer, "dealer's hand: ", true);
       System.out.println(dealerPointStatement);
 
       // ========= end of turn ============
+      // win and lose conditions if player and dealer stand
       if (dealerStand && playerStand){
         if (points > dealerPoints){
           endTurnStatement = "***** You win! To play again, run the code again. *****";
@@ -197,23 +198,17 @@ public class BlackjackDuo {
         gameOver = true;
       }
 
+      // prints an end of turn statement if there is one
       if (!endTurnStatement.isEmpty()){
         System.out.println("");
         System.out.println(endTurnStatement);
       }
       System.out.println("===============================");
     }
-
-  
-  
-
-
-
   }
 }
 
 class Card {
-  // defines value and suit
   String suit;
   String value;
   
@@ -240,6 +235,7 @@ class Card {
       cardPoints = 10;
     }
     else if(cVal.equals("Ace")){
+      // default value for Ace is 11
       cardPoints = 11;
     }
     else {
@@ -294,15 +290,21 @@ class Card {
 
     int aceCount = 0;
 
+    // loop through all cards in hand
     for (int k = 0; k < handArrayArg.length; k++){
-      String cardString = handArrayArg[k].declareCard();
-      handString += "|";
-      handString += cardString;
-      handString += "|";
+      if (printBool){
+        // adds this card's declaration to the handString
+        String cardString = handArrayArg[k].declareCard();
+        handString += "|";
+        handString += cardString;
+        handString += "|";
+      }
 
+      // adds this card's value to handPoints
       int cardValue = handArrayArg[k].calcCardPoints();
       handPoints += cardValue;
 
+      // holds count of number of aces in hand
       if (handArrayArg[k].value.equals("Ace")){
         aceCount++;
       }
