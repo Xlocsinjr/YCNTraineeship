@@ -160,7 +160,7 @@ public class BlackjackDuo {
 
           // blackjack if points = 21, quits game
           if (dealerPoints == 21){
-            endTurnStatement = "***** Blackjack! The dealer wins";
+            endTurnStatement = "***** Blackjack! The dealer wins.";
             endTurnStatement += " To play again, run the code again. *****";
             gameOver = true;
           }
