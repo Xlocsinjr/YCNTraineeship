@@ -191,6 +191,9 @@ public class BlackjackDuo {
         else if (points == dealerPoints){
           endTurnStatement = "***** Tie! To play again, run the code again. *****";
         }
+        else if (points < dealerPoints){
+          endTurnStatement = "***** You lose! To play again, run the code again. *****";
+        }
         gameOver = true;
       }
 
