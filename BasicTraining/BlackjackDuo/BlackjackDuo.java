@@ -1,8 +1,9 @@
 /* ==================================================================
 * BlackjackDuo.java
 *
-* 
-* 
+* Implements a game of blackjack against a dealer
+* The dealer will hit until the dealer's score is higher than or equal to 17
+* The user is asked for input to keep the game going.
 *
 * Xander Locsin
 ** ==================================================================*/ 
