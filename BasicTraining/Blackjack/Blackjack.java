@@ -63,21 +63,12 @@ public class Blackjack {
           System.out.println("New card: " + hitCard.declareCard());
           
           // Updates the hand array to include the new card
-          handArray = Card.updateHandArray(handArray, hitCard);
-          Card.showHand(handArray);
-
           // Updates the card array to remove the new card
+          handArray = Card.updateHandArray(handArray, hitCard);
           cardArray = Card.updateCardArray(cardArray);
 
-          // determine card points
-          int hitCardPoints = hitCard.calcCardPoints();
-          points += hitCardPoints;
-
-          // if points exceed 21 and the card was an Ace, turn card value to 1
-          if (points > 21 && hitCard.value.equals("Ace")){
-            hitCardPoints = 1;
-            points -= 10;
-          }
+          // calculate hand value and prints cards in hand
+          points = Card.showHand(handArray);
 
           // blackjack if points = 21, quits game
           if (points == 21){
@@ -93,7 +84,7 @@ public class Blackjack {
             gameOver = true;
           }
 
-          System.out.println("+ " + hitCardPoints + "      points: " + points);
+          System.out.println("+ " + hitCard.value + "      points: " + points);
           System.out.println("===============================");
         } 
 
@@ -212,18 +203,36 @@ class Card {
     return newCardArray;
   }
 
-  static void showHand(Card[] handArrayArg){
-    // determines the points value of the hand
+  static int showHand(Card[] handArrayArg){
+    // determines the points value of the hand and prints a string of the cards
     // returns the points value of the hand
     int handPoints = 0;
     String handString = "";
 
+    int aceCount = 0;
+
     for (int k = 0; k < handArrayArg.length; k++){
+      String cardString = handArrayArg[k].declareCard();
       handString += "|";
-      handString += handArrayArg[k].declareCard();
+      handString += cardString;
       handString += "|";
+
+      int cardValue = handArrayArg[k].calcCardPoints();
+      handPoints += cardValue;
+
+      if (handArrayArg[k].value.equals("Ace")){
+        aceCount++;
+      }
     }
+    // subtract 10 for every ace in hand, as long as handpoints is over 21
+    while (handPoints > 21 && aceCount > 0){
+      aceCount--;
+      handPoints -= 10;
+    }
+
     System.out.println("Current hand: " + handString);
+
+    return handPoints;
   }
 }
 
