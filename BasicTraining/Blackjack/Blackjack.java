@@ -1,3 +1,12 @@
+/* ==================================================================
+* Blackjack.java
+*
+* Implements a simple single player blackjack game.
+* The user is asked for input to keep the game going.
+*
+* Xander Locsin
+** ==================================================================*/ 
+
 
 import java.util.Random;
 import java.util.Arrays;
@@ -5,6 +14,8 @@ import java.util.Collections;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+
 
 public class Blackjack {
   public static void main(String[] args) {
@@ -45,34 +56,54 @@ public class Blackjack {
         Scanner scanner = new Scanner(System.in);
         userInput = scanner.nextLine();  // Read user input
 
+        Card hitCard = cardArray[0];
+
         // if hit:
-        // remove the first element in the list of cards
-        // add that card to the hand list
         if (userInput.equals("k")){
-          Card hitCard = cardArray[0];
-          hitCard.declareCard();
-
-          // Updates the hand array: 
-          handArray = Card.updateHandArray(handArray, hitCard);
-
-          // Updates the card array:
-          // create list from card array, remove first element, update card array with new array made from list
-          List<Card> newCardList = new ArrayList<Card>(Arrays.asList(cardArray));
-          newCardList.remove(0);	
-          Card[] newCardArray = new Card[newCardList.size()];
-          newCardArray = newCardList.toArray(newCardArray);
-          cardArray = newCardArray;
-
-          // determine hand points
-          int prePoints = points;
-          points = Card.showHand(handArray);
-          System.out.println(prePoints + " + " + hitCard.value + " = " + points);
-          System.out.println("===============================");
-
+          System.out.println("New card: " + hitCard.declareCard());
           
-        } 
-        else if (userInput.equals("p")){
+          // Updates the hand array to include the new card
+          handArray = Card.updateHandArray(handArray, hitCard);
+          Card.showHand(handArray);
 
+          // Updates the card array to remove the new card
+          cardArray = Card.updateCardArray(cardArray);
+
+          // determine card points
+          int hitCardPoints = hitCard.calcCardPoints();
+          points += hitCardPoints;
+
+          // if points exceed 21 and the card was an Ace, turn card value to 1
+          if (points > 21 && hitCard.value.equals("Ace")){
+            hitCardPoints = 1;
+            points -= 10;
+          }
+
+          // blackjack if points = 21, quits game
+          if (points == 21){
+            System.out.println("***Blackjack!***");
+            System.out.println("To play again, run the code again.");
+            gameOver = true;
+          }
+
+          // busts if points over 21, quits game
+          if (points > 21){
+            System.out.println("***Bust! Game over***");
+            System.out.println("To play again, run the code again.");
+            gameOver = true;
+          }
+
+          System.out.println("+ " + hitCardPoints + "      points: " + points);
+          System.out.println("===============================");
+        } 
+
+        // if passed:
+        else if (userInput.equals("p")){
+          // Updates the card array to remove the new card
+          cardArray = Card.updateCardArray(cardArray);
+          Card.showHand(handArray);
+          System.out.println("passed      points: " + points);
+          System.out.println("===============================");
         }
         // if restarted:
         // remake the card array to a shuffled list from the initial card array,
@@ -81,7 +112,7 @@ public class Blackjack {
           cardArray = Card.shuffleDeck(cardArrayInit);
           handArray = new Card[]{};
           points = 0;
-          System.out.println("restarting ...");
+          System.out.println("***restarting ...***");
           System.out.println("===============================");
         } 
         // if quit:
@@ -118,8 +149,29 @@ class Card {
     this.value = valueArg;
   }
 
-  void declareCard(){
-    System.out.println(value + " of " + suit);
+  String declareCard(){
+    // declares the card's value and suit
+    // returns a string of the declaration
+    String declaration = value + " of " + suit;
+    return declaration;
+  }
+
+  int calcCardPoints(){
+    // calculates the numerical value of the card
+    // returns an int of the value
+    int cardPoints = 0;
+    String cVal = value;
+
+    if (cVal.equals("Jack") || cVal.equals("Queen") || cVal.equals("King")){
+      cardPoints = 10;
+    }
+    else if(cVal.equals("Ace")){
+      cardPoints = 11;
+    }
+    else {
+      cardPoints = Integer.parseInt(cVal);
+    } 
+    return cardPoints;
   }
 
   static Card[] shuffleDeck(Card[] cardArrayArg){
@@ -136,45 +188,43 @@ class Card {
   }
 
   static Card[] updateHandArray(Card[] handArrayArg, Card hitCardArg){
-    // declare new array with one more element than current hand
+    // declare new array with one more element than current hand, copy previous hand, add new card
+    // returns the updated hand array
     int newHandLength = handArrayArg.length + 1;
     Card[] newHandArray = new Card[newHandLength];
 
-    // copy previous hand
     for (int i = 0; i < handArrayArg.length; i++){
       newHandArray[i] = handArrayArg[i];
     }
-
-    // add the latest card received
     newHandArray[handArrayArg.length] = hitCardArg;
+
     return newHandArray;
   }
 
-  static int showHand(Card[] handArrayArg){
+  static Card[] updateCardArray(Card[] cardArrayArg){
+    // create list from card array, remove first element, update card array with new array made from list
+    // returns the updated card array
+    List<Card> newCardList = new ArrayList<Card>(Arrays.asList(cardArrayArg));
+    newCardList.remove(0);	
+    Card[] newCardArray = new Card[newCardList.size()];
+    newCardArray = newCardList.toArray(newCardArray);
+    
+    return newCardArray;
+  }
+
+  static void showHand(Card[] handArrayArg){
     // determines the points value of the hand
     // returns the points value of the hand
     int handPoints = 0;
+    String handString = "";
 
     for (int k = 0; k < handArrayArg.length; k++){
-      String cVal = handArrayArg[k].value;
-
-      if (cVal.equals("Jack") || cVal.equals("Queen") || cVal.equals("King")){
-        handPoints += 10;
-      }
-      else if(cVal.equals("Ace")){
-        handPoints += 11;
-        if (handPoints > 21){
-          handPoints -= 10;
-        }
-      }
-      else {
-        handPoints += Integer.parseInt(cVal);
-      }      
+      handString += "|";
+      handString += handArrayArg[k].declareCard();
+      handString += "|";
     }
-
-    return handPoints;
+    System.out.println("Current hand: " + handString);
   }
-
 }
 
 
