@@ -10,7 +10,7 @@ class Spookhuis extends Attraction {
 	void rideAttraction(){
 		ticketsSold++;
 		currentEarnings += ticketPrice;
-		System.out.println("=> riding " + name);
+		System.out.println("=> visiting " + name);
 	}	
 	
 }

@@ -1,6 +1,6 @@
 package kermisV2;
 
-class Attraction {	
+abstract class Attraction {	
 	String name;
 	double surfaceArea;
 	double ticketPrice;

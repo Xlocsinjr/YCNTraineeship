@@ -7,8 +7,9 @@ public class KermisBalance {
 	public boolean rideOptions = true;
 	public boolean adminOptions = false;
 	
-	static float balance = 0;
+	double balance = 0;
 	public static Attraction[] attractionArray;
+	int taxCount = 0;
 	
 	KermisBalance(Attraction[] attractionArrayArg) {
 		attractionArray = attractionArrayArg;
@@ -23,8 +24,8 @@ public class KermisBalance {
 	}
 	
 	// prints a list of the attractions names and the earnings per attraction
-	static void balancePerAttraction() {
-		float totalEarnings = 0;
+	void balancePerAttraction() {
+		double totalEarnings = 0;
 		System.out.println("________________________________________________");
 		System.out.println(padStringToLength("Attraction:", 15)  
 				+ "earnings:");
@@ -43,7 +44,7 @@ public class KermisBalance {
 	}
 	
 	// prints a list of the attractions names and the tickets sold per attraction
-	static void ticketsPerAttraction() {
+	void ticketsPerAttraction() {
 		System.out.println("________________________________________________");
 		System.out.println(padStringToLength("Attraction:", 15)  
 				+ padStringToLength("tickets sold:", 15));
@@ -68,7 +69,7 @@ public class KermisBalance {
 		return newString;
 	}
 	
-	static void formAttractionsList() {
+	void formAttractionsList() {
 		String attractionsString = "";
 		for (int i = 0; i < attractionArray.length; i++) {
 			Attraction thisAttraction = attractionArray[i];

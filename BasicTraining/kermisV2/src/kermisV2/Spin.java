@@ -4,6 +4,7 @@ class Spin extends HighRiskAttraction {
 	Spin(String name) {
 		this.name = name;
 		this.ticketPrice = 2.25;
+		this.ridesLimit = 5;
 		
 	}
 	
@@ -11,7 +12,10 @@ class Spin extends HighRiskAttraction {
 	void rideAttraction(){
 		ticketsSold++;
 		currentEarnings += ticketPrice;
-		System.out.println("=> riding " + name);
+		System.out.println("=> visiting " + name);
+		
+		rideCount++;
+		checkForMaintenance();
 	}	
 	
 }
