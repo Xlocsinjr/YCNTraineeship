@@ -96,14 +96,10 @@ public class KermisBalance {
 		
 		// tries parsing the input to an integer
 		// if possible; the user will ride corresponding attraction
+		boolean inputIsInt = false;
 		try {
 			inputAsInt = Integer.parseInt(userInput);
-			if (inputAsInt <= attractionArray.length && inputAsInt > 0) {
-				attractionArray[inputAsInt - 1].rideAttraction();
-			}
-			else {
-				System.out.println("***** Please enter a valid command. *****");
-			}
+			inputIsInt = true;
 		}
 		// if not possible to parse input to int: check if one of the other commands were given
 		catch (Exception e){
@@ -121,6 +117,14 @@ public class KermisBalance {
 			else {
 				System.out.println("***** Please enter a valid command. *****");
 			}
+		}
+		
+		// if input is int:
+		if (inputIsInt && inputAsInt <= attractionArray.length && inputAsInt > 0) {
+			attractionArray[inputAsInt - 1].rideAttraction();
+		}
+		else {
+			System.out.println("***** Please enter a valid command. *****");
 		}
 	}
 	

@@ -6,13 +6,14 @@ abstract class HighRiskAttraction extends Attraction{
 	
 	void maintenance() {
 		rideCount = 0;
+		System.out.println("===== " + this.name + " underwent maintenance. =====");
 	}
 	
+	// check if rideCount exceeds ridesLimit. Throws exception if it does.
 	void checkForMaintenance() {
-		rideCount++;
 		if (this.rideCount > this.ridesLimit) {
-			maintenance();
-			System.out.println("===== " + this.name + " underwent maintenance. =====");
+			throw new ArithmeticException("===== " + this.name + "has exceeded its ride limit! ====="); 
 		}
+		System.out.println("===== " + this.name + " has run " + this.rideCount + " times since last maintenance. =====");
 	}
 }

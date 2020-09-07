@@ -9,12 +9,12 @@ class Hawaii extends HighRiskAttraction {
 	
 	// override
 	void rideAttraction(){
+		checkForMaintenance();
+		rideCount++;
+		
 		ticketsSold++;
 		currentEarnings += ticketPrice;
 		System.out.println("=> visiting " + name);
-		
-		rideCount++;
-		checkForMaintenance();
 	}
 	
 }
