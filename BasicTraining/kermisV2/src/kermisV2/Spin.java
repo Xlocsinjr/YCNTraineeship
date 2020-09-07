@@ -1,12 +1,10 @@
 package kermisV2;
 
-class Spin extends Attraction {
-	String name = "Spin";
-	float ticketPrice = (float)2.25;
-	
-	Spin() {
-		super.name = this.name;
-		super.ticketPrice = this.ticketPrice;
+class Spin extends HighRiskAttraction {
+	Spin(String name) {
+		this.name = name;
+		this.ticketPrice = 2.25;
+		
 	}
 	
 	// override

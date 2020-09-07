@@ -1,12 +1,9 @@
 package kermisV2;
 
 class Spookhuis extends Attraction {
-	String name = "Spookhuis";
-	float ticketPrice = (float)3.20;
-	
-	Spookhuis() {
-		super.name = this.name;
-		super.ticketPrice = this.ticketPrice;
+	Spookhuis(String name) {
+		this.name = name;
+		this.ticketPrice = 3.20;
 	}
 	
 	// override

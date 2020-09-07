@@ -10,12 +10,12 @@ package kermisV2;
 public class kermisV2 {
 	public static void main(String[] args) {
 		// make all the attractions
-		BotsAutos bumper = new BotsAutos();
-		Spin spider = new Spin();
-		Spiegelpaleis mirrors = new Spiegelpaleis();
-		Spookhuis haunt = new Spookhuis();
-		Hawaii hawaii = new Hawaii();
-		Ladderklimmen ladders = new Ladderklimmen();
+		BotsAutos bumper = new BotsAutos("bumper");
+		Spin spider = new Spin("Spin");
+		Spiegelpaleis mirrors = new Spiegelpaleis("mirrors");
+		Spookhuis haunt = new Spookhuis("haunt");
+		Hawaii hawaii = new Hawaii("hawaii");
+		Ladderklimmen ladders = new Ladderklimmen("ladders");
 
 		Attraction[] attractionArray = {bumper, spider, mirrors, haunt, hawaii, ladders};
 		

@@ -1,19 +1,16 @@
 package kermisV2;
 
 class Spiegelpaleis extends Attraction {
-	String name = "Spiegelpaleis";
-	float ticketPrice = (float)2.75;
-	
-	Spiegelpaleis() {
-		super.name = this.name;
-		super.ticketPrice = this.ticketPrice;
+	Spiegelpaleis(String name) {
+		this.name = name;
+		this.ticketPrice = 2.75;
 	}
 	
 	// override
 	void rideAttraction(){
 		ticketsSold++;
 		currentEarnings += ticketPrice;
-		System.out.println("=> riding " + name);
+		System.out.println("=> visiting " + name);
 	}	
 	
 }

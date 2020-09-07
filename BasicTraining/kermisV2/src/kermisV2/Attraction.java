@@ -2,10 +2,10 @@ package kermisV2;
 
 class Attraction {	
 	String name;
-	float surfaceArea;
-	float ticketPrice;
+	double surfaceArea;
+	double ticketPrice;
 	int ticketsSold;
-	float currentEarnings;
+	double currentEarnings;
 	
 	void rideAttraction() {}
 	
