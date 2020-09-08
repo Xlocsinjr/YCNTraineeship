@@ -12,8 +12,17 @@ import com.XanderYCNT.NotesAPIv2.repositories.NoteRepository;
 @Transactional
 public class NoteService {
 	
-	@Autowired
+	// instantiate an interface ???
+	// = automatiseert t instantieren
+	@Autowired 
 	private NoteRepository noteRepository;
+	
+	public void serviceMethod(Note note) {
+		System.out.println("this is method in service");
+		Note serviceTestNote = new Note();
+		serviceTestNote.body = "serviceTestNoteBody";
+		noteRepository.save(serviceTestNote);
+	}
 	
 	public Iterable<Note> findAll() {
 		return noteRepository.findAll();
