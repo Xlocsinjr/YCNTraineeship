@@ -64,11 +64,13 @@ public class NoteEndpoint {
 	}
 	
 
+	/*
 	@PostMapping("/NoteCreate")
 	//@RequestBody Note note
 	public void go() {
 		noteService.serviceMethod();
 	}
+	*/
 	
 	
 }
