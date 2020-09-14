@@ -77,3 +77,8 @@ D:\YCNTraineeship\BasicTraining\WebApplicationPractice\WebApplicationPractice\ob
 D:\YCNTraineeship\BasicTraining\WebApplicationPractice\WebApplicationPractice\obj\Debug\WebApplicationPractice.csproj.CopyComplete
 D:\YCNTraineeship\BasicTraining\WebApplicationPractice\WebApplicationPractice\obj\Debug\WebApplicationPractice.dll
 D:\YCNTraineeship\BasicTraining\WebApplicationPractice\WebApplicationPractice\obj\Debug\WebApplicationPractice.pdb
+D:\YCNTraineeship\BasicTraining\WebApplicationPractice\WebApplicationPractice\bin\WebApplicationPracticeDB.dll
+D:\YCNTraineeship\BasicTraining\WebApplicationPractice\WebApplicationPractice\bin\EntityFramework.dll
+D:\YCNTraineeship\BasicTraining\WebApplicationPractice\WebApplicationPractice\bin\WebApplicationPracticeDB.pdb
+D:\YCNTraineeship\BasicTraining\WebApplicationPractice\WebApplicationPractice\bin\WebApplicationPracticeDB.dll.config
+D:\YCNTraineeship\BasicTraining\WebApplicationPractice\WebApplicationPractice\bin\EntityFramework.xml
